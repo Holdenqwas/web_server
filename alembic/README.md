@@ -1,3 +1,6 @@
-Generic single-database configuration.
+# Использование alembic
 
-lembic revision --autogenerate -m "Added account table"
+
+`alembic revision --autogenerate -m "fix"` - создать версию
+
+`alembic upgrade head` - проапгрейдить базу до последнего состояния
