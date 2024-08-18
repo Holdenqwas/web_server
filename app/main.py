@@ -24,4 +24,5 @@ def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
 if __name__ == "__main__":
+    print(os.getenv("HOST"))
     uvicorn.run("main:app", host=os.getenv("HOST"), port=int(os.getenv("PORT")))
