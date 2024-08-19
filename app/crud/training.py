@@ -25,8 +25,27 @@ async def get_training(db: AsyncSession):
     return db_data
 
 
+async def get_last_exercise(name_training: str, name_exercise: str, db: AsyncSession):
+    train = await get_training(db)
+    model = db_model.get_model(match_name_menu_table[name_training])
+
+    if not train.breast_uid and not train.beak_uid and not train.leg_uid:
+        stmt = select(model).order_by(model.date.desc())
+        result = await db.execute(stmt)
+        db_exercise = result.scalars().first()
+        return getattr(db_exercise, match_exercise_column[name_exercise])
+
+    stmt = select(model).order_by(model.date.desc()).limit(2)
+    result = await db.execute(stmt)
+    db_exercises = result.scalars().all()
+    if len(db_exercises) == 2:
+        return getattr(db_exercises[-1], match_exercise_column[name_exercise])
+    return -1
+
+
 async def create_training(data: schema.TrainingDTO, db: AsyncSession):
     new_train = db_model.Training(**data.model_dump())
+    new_train.name_training = match_name_menu_table[data.name_training]
     db.add(new_train)
     return new_train
 
@@ -43,13 +62,12 @@ async def update_training(data: schema.TrainingDTO, db: AsyncSession):
 
 async def write_exercise(data: schema.ExerciseDTO, db: AsyncSession):
     train = await get_training(db)
-    if not train.name_training:
+    if not train.breast_uid and not train.beak_uid and not train.leg_uid:
         # train.name_training = match_name_menu_table[data.name_training]
         model = db_model.get_model(match_name_menu_table[data.name_training])
         value = {match_exercise_column[data.name_exercise]: data.value}
         new_exercise = model(**value)
         db.add(new_exercise)
-
         stmt = select(model).order_by(model.date.desc())
         result = await db.execute(stmt)
         db_exercise = result.scalars().first()

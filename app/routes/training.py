@@ -20,6 +20,15 @@ async def get_training(db: AsyncSession = Depends(get_db)):
 
     return result
 
+@router.get('/{name_training}/{name_exercise}', response_model=float)
+async def get_training(name_training: str, name_exercise: str, db: AsyncSession = Depends(get_db)):
+    result = await crud.get_last_exercise(name_training, name_exercise, db)
+
+    if result is None:
+        return -1
+
+    return result
+
 @router.post('/create', response_model=training_schema.TrainingDTO)
 async def create_training(data: training_schema.TrainingDTO, db: AsyncSession = Depends(get_db)):
     result = await crud.create_training(data, db)
