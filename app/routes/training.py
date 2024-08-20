@@ -4,14 +4,15 @@ from fastapi import APIRouter, HTTPException, Path, Depends
 from typing import Union
 
 from app.utils.database import get_db
+from app.utils.auth import require_user
 from app.crud import training as crud
-from app.schemes import training as training_schema
+from app.schemas import training as training_schema
 
 router = APIRouter()
 
 
 @router.get('/last', response_model=training_schema.TrainingDTO)
-async def get_training(db: AsyncSession = Depends(get_db)):
+async def get_training(user: str = Depends(require_user), db: AsyncSession = Depends(get_db)):
     result = await crud.get_training(db)
 
     if result is None:
@@ -21,7 +22,7 @@ async def get_training(db: AsyncSession = Depends(get_db)):
     return result
 
 @router.get('/{name_training}/{name_exercise}', response_model=float)
-async def get_training(name_training: str, name_exercise: str, db: AsyncSession = Depends(get_db)):
+async def get_training(name_training: str, name_exercise: str, user: str = Depends(require_user), db: AsyncSession = Depends(get_db)):
     result = await crud.get_last_exercise(name_training, name_exercise, db)
 
     if result is None:
@@ -30,7 +31,7 @@ async def get_training(name_training: str, name_exercise: str, db: AsyncSession 
     return result
 
 @router.post('/create', response_model=training_schema.TrainingDTO)
-async def create_training(data: training_schema.TrainingDTO, db: AsyncSession = Depends(get_db)):
+async def create_training(data: training_schema.TrainingDTO, user: str = Depends(require_user), db: AsyncSession = Depends(get_db)):
     result = await crud.create_training(data, db)
 
     if result is None:
@@ -40,12 +41,12 @@ async def create_training(data: training_schema.TrainingDTO, db: AsyncSession = 
     return result
 
 @router.patch('/update', response_model=training_schema.TrainingDTO)
-async def update_training(data: training_schema.TrainingDTO, db: AsyncSession = Depends(get_db)):
+async def update_training(data: training_schema.TrainingDTO, user: str = Depends(require_user), db: AsyncSession = Depends(get_db)):
     result = await crud.update_training(data, db)
 
     return result
 
 @router.post('/write_exercise')
-async def write_exercise(data: training_schema.ExerciseDTO, db: AsyncSession = Depends(get_db)):
+async def write_exercise(data: training_schema.ExerciseDTO, user: str = Depends(require_user), db: AsyncSession = Depends(get_db)):
     result = await crud.write_exercise(data, db)
 

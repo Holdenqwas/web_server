@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional
 
-from app.schemes.shared import BaseSchema
+from app.schemas.shared import BaseSchema
 
 class TrainingDTO(BaseSchema):
     weight: Optional[float] = None

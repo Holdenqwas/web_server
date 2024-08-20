@@ -1,7 +1,7 @@
 import sys
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.schemes import training as schema
+from app.schemas import training as schema
 from app.models import db_model
 
 
