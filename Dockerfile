@@ -40,5 +40,4 @@ COPY . .
 EXPOSE 5000
 
 # Run the application.
-RUN echo ls
-RUN python3 ./app/main.py
+CMD python3 ./app/main.py
