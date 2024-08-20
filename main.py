@@ -2,7 +2,7 @@ import os
 
 import uvicorn
 from dotenv import load_dotenv
-load_dotenv("../.env/all.env")
+load_dotenv(".env/all.env")
 
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware

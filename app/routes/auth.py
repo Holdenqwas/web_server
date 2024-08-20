@@ -6,7 +6,7 @@ from fastapi import APIRouter, Response, HTTPException
 from fastapi.params import Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
-from app.utils.auth import generate_token
+from ..utils.auth import generate_token
 
 router = APIRouter()
 ACCESS_TOKEN_EXPIRED_IN = int(os.getenv("EXPIRED_IN"))
