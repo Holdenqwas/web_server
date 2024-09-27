@@ -124,11 +124,11 @@ class TrainingAll(Base):
 
     date = Column(types.DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now())
 
-    train1 = relationship("Train1")
-    train2 = relationship("Train2")
-    train3 = relationship("Train3")
-    train4 = relationship("Train4")
-    train5 = relationship("Train5")
+    train1 = relationship("Train1", cascade="all,delete")
+    train2 = relationship("Train2", cascade="all,delete")
+    train3 = relationship("Train3", cascade="all,delete")
+    train4 = relationship("Train4", cascade="all,delete")
+    train5 = relationship("Train5", cascade="all,delete")
 
     def __repr__(self) -> str:
         return repr_table(self)
@@ -282,10 +282,10 @@ class Users(Base):
     allow_access = Column(Boolean)
     name_trainings = Column(Text, nullable=True)
     name_exer_train1 = Column(Text, nullable=True)
-    name_exer_train1 = Column(Text, nullable=True)
-    name_exer_train1 = Column(Text, nullable=True)
-    name_exer_train1 = Column(Text, nullable=True)
-    name_exer_train1 = Column(Text, nullable=True)
+    name_exer_train2 = Column(Text, nullable=True)
+    name_exer_train3 = Column(Text, nullable=True)
+    name_exer_train4 = Column(Text, nullable=True)
+    name_exer_train5 = Column(Text, nullable=True)
 
     date = Column(types.DateTime(timezone=True), server_default=func.now(),
                   server_onupdate=func.now())
