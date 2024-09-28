@@ -1,10 +1,25 @@
-from sqlalchemy import Column, Boolean, Float, String, Text, ForeignKey, select, text, types
-from sqlalchemy.orm import declarative_base, DeclarativeBase, Mapped, MappedAsDataclass, mapped_column
+from sqlalchemy import (
+    Column,
+    Boolean,
+    Integer,
+    Float,
+    String,
+    Text,
+    ForeignKey,
+    text,
+    types,
+)
+from sqlalchemy.orm import (
+    declarative_base,
+    Mapped,
+    mapped_column,
+)
 import uuid
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 
 Base = declarative_base()
+
 
 def repr_table(table) -> str:
     output = f"{table.__tablename__}: ("
@@ -19,15 +34,17 @@ class Training(Base):
     __tablename__ = "training"
 
     uid: Mapped[uuid.UUID] = mapped_column(
-        types.Uuid,
-        primary_key=True,
-        server_default=text("gen_random_uuid()")
+        types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
     weight = Column(Float, nullable=True)
-    leg_uid = Column(types.Uuid, ForeignKey('leg.uid'), nullable=True)
+    leg_uid = Column(types.Uuid, ForeignKey("leg.uid"), nullable=True)
     beak_uid = Column(types.Uuid, ForeignKey("beak.uid"), nullable=True)
-    breast_uid = Column(types.Uuid, ForeignKey('breast.uid'), nullable=True)
-    date = Column(types.DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now())
+    breast_uid = Column(types.Uuid, ForeignKey("breast.uid"), nullable=True)
+    date = Column(
+        types.DateTime(timezone=True),
+        server_default=func.now(),
+        server_onupdate=func.now(),
+    )
     name_training = Column(String, nullable=True)
 
     breast = relationship("Breast", back_populates="training")
@@ -42,17 +59,18 @@ class Breast(Base):
     __tablename__ = "breast"
 
     uid: Mapped[uuid.UUID] = mapped_column(
-        types.Uuid,
-        primary_key=True,
-        server_default=text("gen_random_uuid()")
+        types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
     bench_press = Column(Float, nullable=True)
     bench_press_inclined = Column(Float, nullable=True)
     pullover = Column(Float, nullable=True)
     dumbbells = Column(Float, nullable=True)
     block = Column(Float, nullable=True)
-    date = Column(types.DateTime(timezone=True), server_default=func.now(),
-                  server_onupdate=func.now())
+    date = Column(
+        types.DateTime(timezone=True),
+        server_default=func.now(),
+        server_onupdate=func.now(),
+    )
 
     training = relationship("Training", back_populates="breast")
 
@@ -64,9 +82,7 @@ class Beak(Base):
     __tablename__ = "beak"
 
     uid: Mapped[uuid.UUID] = mapped_column(
-        types.Uuid,
-        primary_key=True,
-        server_default=text("gen_random_uuid()")
+        types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
     triceps_bench_press = Column(Float, nullable=True)
     french_bench_press = Column(Float, nullable=True)
@@ -74,8 +90,11 @@ class Beak(Base):
     gravitron = Column(Float, nullable=True)
     upper_block = Column(Float, nullable=True)
     lower_block = Column(Float, nullable=True)
-    date = Column(types.DateTime(timezone=True), server_default=func.now(),
-                  server_onupdate=func.now())
+    date = Column(
+        types.DateTime(timezone=True),
+        server_default=func.now(),
+        server_onupdate=func.now(),
+    )
 
     training = relationship("Training", back_populates="beak")
 
@@ -87,9 +106,7 @@ class Leg(Base):
     __tablename__ = "leg"
 
     uid: Mapped[uuid.UUID] = mapped_column(
-        types.Uuid,
-        primary_key=True,
-        server_default=text("gen_random_uuid()")
+        types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
     army_bench_press = Column(Float, nullable=True)
     craving_for_chin = Column(Float, nullable=True)
@@ -97,8 +114,11 @@ class Leg(Base):
     knee_bend = Column(Float, nullable=True)
     platform_press = Column(Float, nullable=True)
     extension_of_block = Column(Float, nullable=True)
-    date = Column(types.DateTime(timezone=True), server_default=func.now(),
-                  server_onupdate=func.now())
+    date = Column(
+        types.DateTime(timezone=True),
+        server_default=func.now(),
+        server_onupdate=func.now(),
+    )
 
     training = relationship("Training", back_populates="leg")
 
@@ -110,25 +130,28 @@ class TrainingAll(Base):
     __tablename__ = "training_all"
 
     uid: Mapped[uuid.UUID] = mapped_column(
-        types.Uuid,
-        primary_key=True,
-        server_default=text("gen_random_uuid()")
+        types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
     user_name = Column(Text, nullable=False)
     weight = Column(Float, nullable=True)
-    train1_uid = Column(types.Uuid, ForeignKey('train1.uid'), nullable=True)
-    train2_uid = Column(types.Uuid, ForeignKey('train2.uid'), nullable=True)
-    train3_uid = Column(types.Uuid, ForeignKey('train3.uid'), nullable=True)
-    train4_uid = Column(types.Uuid, ForeignKey('train4.uid'), nullable=True)
-    train5_uid = Column(types.Uuid, ForeignKey('train5.uid'), nullable=True)
+    train1_uid = Column(types.Uuid, ForeignKey("train1.uid"), nullable=True)
+    train2_uid = Column(types.Uuid, ForeignKey("train2.uid"), nullable=True)
+    train3_uid = Column(types.Uuid, ForeignKey("train3.uid"), nullable=True)
+    train4_uid = Column(types.Uuid, ForeignKey("train4.uid"), nullable=True)
+    train5_uid = Column(types.Uuid, ForeignKey("train5.uid"), nullable=True)
 
-    date = Column(types.DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now())
+    index_train = Column(Integer, nullable=True)
+    date = Column(
+        types.DateTime(timezone=True),
+        server_default=func.now(),
+        server_onupdate=func.now(),
+    )
 
-    train1 = relationship("Train1", cascade="all,delete")
-    train2 = relationship("Train2", cascade="all,delete")
-    train3 = relationship("Train3", cascade="all,delete")
-    train4 = relationship("Train4", cascade="all,delete")
-    train5 = relationship("Train5", cascade="all,delete")
+    train1 = relationship("Train1", cascade="all,delete", lazy="noload")
+    train2 = relationship("Train2", cascade="all,delete", lazy="noload")
+    train3 = relationship("Train3", cascade="all,delete", lazy="noload")
+    train4 = relationship("Train4", cascade="all,delete", lazy="noload")
+    train5 = relationship("Train5", cascade="all,delete", lazy="noload")
 
     def __repr__(self) -> str:
         return repr_table(self)
@@ -138,14 +161,12 @@ class Train1(Base):
     __tablename__ = "train1"
 
     uid: Mapped[uuid.UUID] = mapped_column(
-        types.Uuid,
-        primary_key=True,
-        server_default=text("gen_random_uuid()")
+        types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
     ex1 = Column(Float, nullable=True)
     ex2 = Column(Float, nullable=True)
     ex3 = Column(Float, nullable=True)
-    ex4= Column(Float, nullable=True)
+    ex4 = Column(Float, nullable=True)
     ex5 = Column(Float, nullable=True)
     ex6 = Column(Float, nullable=True)
     ex7 = Column(Float, nullable=True)
@@ -153,26 +174,26 @@ class Train1(Base):
     ex9 = Column(Float, nullable=True)
     ex10 = Column(Float, nullable=True)
 
-    date = Column(types.DateTime(timezone=True), server_default=func.now(),
-                  server_onupdate=func.now())
-
-    training = relationship("Training")
+    date = Column(
+        types.DateTime(timezone=True),
+        server_default=func.now(),
+        server_onupdate=func.now(),
+    )
 
     def __repr__(self) -> str:
         return repr_table(self)
+
 
 class Train2(Base):
     __tablename__ = "train2"
 
     uid: Mapped[uuid.UUID] = mapped_column(
-        types.Uuid,
-        primary_key=True,
-        server_default=text("gen_random_uuid()")
+        types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
     ex1 = Column(Float, nullable=True)
     ex2 = Column(Float, nullable=True)
     ex3 = Column(Float, nullable=True)
-    ex4= Column(Float, nullable=True)
+    ex4 = Column(Float, nullable=True)
     ex5 = Column(Float, nullable=True)
     ex6 = Column(Float, nullable=True)
     ex7 = Column(Float, nullable=True)
@@ -180,26 +201,26 @@ class Train2(Base):
     ex9 = Column(Float, nullable=True)
     ex10 = Column(Float, nullable=True)
 
-    date = Column(types.DateTime(timezone=True), server_default=func.now(),
-                  server_onupdate=func.now())
-
-    training = relationship("Training")
+    date = Column(
+        types.DateTime(timezone=True),
+        server_default=func.now(),
+        server_onupdate=func.now(),
+    )
 
     def __repr__(self) -> str:
         return repr_table(self)
+
 
 class Train3(Base):
     __tablename__ = "train3"
 
     uid: Mapped[uuid.UUID] = mapped_column(
-        types.Uuid,
-        primary_key=True,
-        server_default=text("gen_random_uuid()")
+        types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
     ex1 = Column(Float, nullable=True)
     ex2 = Column(Float, nullable=True)
     ex3 = Column(Float, nullable=True)
-    ex4= Column(Float, nullable=True)
+    ex4 = Column(Float, nullable=True)
     ex5 = Column(Float, nullable=True)
     ex6 = Column(Float, nullable=True)
     ex7 = Column(Float, nullable=True)
@@ -207,26 +228,26 @@ class Train3(Base):
     ex9 = Column(Float, nullable=True)
     ex10 = Column(Float, nullable=True)
 
-    date = Column(types.DateTime(timezone=True), server_default=func.now(),
-                  server_onupdate=func.now())
-
-    training = relationship("Training")
+    date = Column(
+        types.DateTime(timezone=True),
+        server_default=func.now(),
+        server_onupdate=func.now(),
+    )
 
     def __repr__(self) -> str:
         return repr_table(self)
+
 
 class Train4(Base):
     __tablename__ = "train4"
 
     uid: Mapped[uuid.UUID] = mapped_column(
-        types.Uuid,
-        primary_key=True,
-        server_default=text("gen_random_uuid()")
+        types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
     ex1 = Column(Float, nullable=True)
     ex2 = Column(Float, nullable=True)
     ex3 = Column(Float, nullable=True)
-    ex4= Column(Float, nullable=True)
+    ex4 = Column(Float, nullable=True)
     ex5 = Column(Float, nullable=True)
     ex6 = Column(Float, nullable=True)
     ex7 = Column(Float, nullable=True)
@@ -234,26 +255,26 @@ class Train4(Base):
     ex9 = Column(Float, nullable=True)
     ex10 = Column(Float, nullable=True)
 
-    date = Column(types.DateTime(timezone=True), server_default=func.now(),
-                  server_onupdate=func.now())
-
-    training = relationship("Training")
+    date = Column(
+        types.DateTime(timezone=True),
+        server_default=func.now(),
+        server_onupdate=func.now(),
+    )
 
     def __repr__(self) -> str:
         return repr_table(self)
+
 
 class Train5(Base):
     __tablename__ = "train5"
 
     uid: Mapped[uuid.UUID] = mapped_column(
-        types.Uuid,
-        primary_key=True,
-        server_default=text("gen_random_uuid()")
+        types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
     ex1 = Column(Float, nullable=True)
     ex2 = Column(Float, nullable=True)
     ex3 = Column(Float, nullable=True)
-    ex4= Column(Float, nullable=True)
+    ex4 = Column(Float, nullable=True)
     ex5 = Column(Float, nullable=True)
     ex6 = Column(Float, nullable=True)
     ex7 = Column(Float, nullable=True)
@@ -261,34 +282,37 @@ class Train5(Base):
     ex9 = Column(Float, nullable=True)
     ex10 = Column(Float, nullable=True)
 
-    date = Column(types.DateTime(timezone=True), server_default=func.now(),
-                  server_onupdate=func.now())
-
-    training = relationship("Training")
+    date = Column(
+        types.DateTime(timezone=True),
+        server_default=func.now(),
+        server_onupdate=func.now(),
+    )
 
     def __repr__(self) -> str:
         return repr_table(self)
+
 
 class Users(Base):
     __tablename__ = "users"
 
     uid: Mapped[uuid.UUID] = mapped_column(
-        types.Uuid,
-        primary_key=True,
-        server_default=text("gen_random_uuid()")
+        types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
-    name = Column(Text, unique=True)
+    user_name = Column(Text, unique=True)
     last_date_license = Column(types.DateTime(timezone=True))
     allow_access = Column(Boolean)
-    name_trainings = Column(Text, nullable=True)
-    name_exer_train1 = Column(Text, nullable=True)
-    name_exer_train2 = Column(Text, nullable=True)
-    name_exer_train3 = Column(Text, nullable=True)
-    name_exer_train4 = Column(Text, nullable=True)
-    name_exer_train5 = Column(Text, nullable=True)
+    name_trainings = Column(Text, nullable=True, server_default=text(""))
+    name_exer_train1 = Column(Text, nullable=True, server_default=text(""))
+    name_exer_train2 = Column(Text, nullable=True, server_default=text(""))
+    name_exer_train3 = Column(Text, nullable=True, server_default=text(""))
+    name_exer_train4 = Column(Text, nullable=True, server_default=text(""))
+    name_exer_train5 = Column(Text, nullable=True, server_default=text(""))
 
-    date = Column(types.DateTime(timezone=True), server_default=func.now(),
-                  server_onupdate=func.now())
+    date = Column(
+        types.DateTime(timezone=True),
+        server_default=func.now(),
+        server_onupdate=func.now(),
+    )
 
     def __repr__(self) -> str:
         return repr_table(self)
