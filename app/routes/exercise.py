@@ -5,15 +5,15 @@ from typing import Union
 
 from app.utils.database import get_db
 from app.utils.auth import require_user
-from app.crud import training as crud
-from app.schemas import training as training_schema
+from app.crud import exercise as crud
+from app.schemas import exercise as exercise_schema
 
 router = APIRouter()
 
 
-@router.post("/write_exercise", response_model=training_schema.ExerciseDTO)
+@router.post("/write_exercise")
 async def write_exercise(
-    data: training_schema.TrainingDTO,
+    data: exercise_schema.ExerciseDTO,
     # user: str = Depends(require_user),
     db: AsyncSession = Depends(get_db),
 ):
