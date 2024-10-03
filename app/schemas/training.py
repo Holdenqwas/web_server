@@ -1,12 +1,18 @@
 from pydantic import Field
-from typing import Optional
+from typing import Optional, List
 
 from app.schemas.shared import BaseSchema
+
+
+class CreateTrainingAll(BaseSchema):
+    user_name: str
+    weight: Optional[float] = None
 
 
 class TrainingDTO(BaseSchema):
     user_name: str
     weight: Optional[float] = None
+    name_trains: Optional[List[str]] = None
 
 
 class CreateTrain(BaseSchema):
