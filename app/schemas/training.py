@@ -18,3 +18,9 @@ class TrainingDTO(BaseSchema):
 class CreateTrain(BaseSchema):
     user_name: str
     name_training: str = Field(examples=["breast"])
+
+
+class NameExercises(BaseSchema):
+    user_name: str
+    name_training: str
+    name_exercises: Optional[List[str]] = str

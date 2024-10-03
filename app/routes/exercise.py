@@ -18,3 +18,13 @@ async def write_exercise(
     db: AsyncSession = Depends(get_db),
 ):
     await crud.write_exercise(data, db)
+
+
+@router.get("/{name_train}/{name_exercise}")
+async def get_last_exercise(
+    name_train: str,
+    name_exercise: str,
+    # user: str = Depends(require_user),
+    db: AsyncSession = Depends(get_db),
+):
+    return await crud.get_last_exercise(name_train, name_exercise, db)
