@@ -82,7 +82,7 @@ async def create_train(data: schema.CreateTrain, db: AsyncSession):
     train_model = db_model.get_model(f"train{index_trains}")
     new_train = train_model()
     db.add(new_train)
-    await db.refresh(new_train)
+    # await db.refresh(new_train)
 
     train_all = await get_training(data.user_name, db)
 

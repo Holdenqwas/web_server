@@ -41,7 +41,7 @@ async def create_train(
 
 @router.post("/name_exercises", response_model=training_schema.NameExercises)
 async def get_name_exercises(
-    data: training_schema.NameExercise,
+    data: training_schema.NameExercises,
     # user: str = Depends(require_user),
     db: AsyncSession = Depends(get_db),
 ):

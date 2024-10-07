@@ -41,16 +41,17 @@ async def get_last_exercise(
     uid = getattr(train, f"train{train.index_train}_uid")
     model = db_model.get_model(f"train{train.index_train}")
 
-    user = await get_user(data.user_name, db)
+    user = await get_user(user_name, db)
     name_exercise = getattr(user, f"name_exer_train{train.index_train}").split(
         ","
     )
-    index_exercise = name_exercise.index(data.name_exercise) + 1
+    index_exercise = name_exercise.index(name_exercise) + 1
 
     stmt = select(model).filter(model.uid == uid)
     result = await db.execute(stmt)
     db_data = result.scalars().first()
 
-    setattr(db_data, f"ex{index_exercise}", data.value)
+    setattr(db_data, f"ex{index_exercise}", value)
     db.add(db_data)
     return train
+    return "Пока ничего нет"
