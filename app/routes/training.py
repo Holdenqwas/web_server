@@ -1,7 +1,6 @@
-from pydantic.v1.schema import schema
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, HTTPException, Path, Depends
-from typing import Union
+from fastapi import APIRouter, HTTPException, Depends
+
 
 from app.utils.database import get_db
 from app.utils.auth import require_user
@@ -11,10 +10,27 @@ from app.schemas import training as training_schema
 router = APIRouter()
 
 
+@router.get(
+    "/name_trainings/{username}",
+    response_model=training_schema.NameTrainingsDTO,
+)
+async def create_training_all(
+    username: str,
+    user: str = Depends(require_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await crud.get_name_trains(username, db)
+
+    if not result:
+        raise HTTPException(status_code=404, detail="Cant get trainings")
+
+    return {"name_trains": result}
+
+
 @router.post("/create", response_model=training_schema.TrainingDTO)
 async def create_training_all(
     data: training_schema.CreateTrainingAll,
-    # user: str = Depends(require_user),
+    user: str = Depends(require_user),
     db: AsyncSession = Depends(get_db),
 ):
     result = await crud.create_training_all(data, db)
@@ -28,7 +44,7 @@ async def create_training_all(
 @router.post("/create_train", response_model=training_schema.TrainingDTO)
 async def create_train(
     data: training_schema.CreateTrain,
-    # user: str = Depends(require_user),
+    user: str = Depends(require_user),
     db: AsyncSession = Depends(get_db),
 ):
     result = await crud.create_train(data, db)
@@ -42,7 +58,7 @@ async def create_train(
 @router.post("/name_exercises", response_model=training_schema.NameExercises)
 async def get_name_exercises(
     data: training_schema.NameExercises,
-    # user: str = Depends(require_user),
+    user: str = Depends(require_user),
     db: AsyncSession = Depends(get_db),
 ):
     result = await crud.get_name_exercise(data, db)

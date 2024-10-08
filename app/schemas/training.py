@@ -4,6 +4,10 @@ from typing import Optional, List
 from app.schemas.shared import BaseSchema
 
 
+class NameTrainingsDTO(BaseSchema):
+    name_trains: Optional[List[str]] = None
+
+
 class CreateTrainingAll(BaseSchema):
     user_name: str
     weight: Optional[float] = None

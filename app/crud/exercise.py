@@ -33,25 +33,20 @@ async def write_exercise(data: schema.ExerciseDTO, db: AsyncSession):
 async def get_last_exercise(
     user_name: str, name_train: str, name_exercise: str, db: AsyncSession
 ):
-    index_train, index_exer = get_index_train_and_exercise(
-        user_name, name_train, name_exercise
+    index_train, index_exer = await get_index_train_and_exercise(
+        user_name, name_train, name_exercise, db
     )
-    # TODO здесь
     train = await get_prev_training(user_name, index_train, db)
+    if not train:
+        return "Данных еще нет"
     uid = getattr(train, f"train{train.index_train}_uid")
     model = db_model.get_model(f"train{train.index_train}")
-
-    user = await get_user(user_name, db)
-    name_exercise = getattr(user, f"name_exer_train{train.index_train}").split(
-        ","
-    )
-    index_exercise = name_exercise.index(name_exercise) + 1
 
     stmt = select(model).filter(model.uid == uid)
     result = await db.execute(stmt)
     db_data = result.scalars().first()
 
-    setattr(db_data, f"ex{index_exercise}", value)
-    db.add(db_data)
-    return train
-    return "Пока ничего нет"
+    value = getattr(db_data, f"ex{index_exer}")
+    if value:
+        return value
+    return "Данных еще нет"
