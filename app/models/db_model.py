@@ -1,11 +1,12 @@
 from sqlalchemy import (
-    Column,
+    ARRAY,
+    UUID,
     Boolean,
-    Integer,
+    Column,
     Float,
-    String,
-    Text,
     ForeignKey,
+    Integer,
+    Text,
     text,
     types,
 )
@@ -212,7 +213,28 @@ class Users(Base):
     name_exer_train4 = Column(Text, nullable=True, server_default=text(""))
     name_exer_train5 = Column(Text, nullable=True, server_default=text(""))
 
+    array_shop_list = Column(ARRAY(UUID), nullable=True)
     date = Column(
+        types.DateTime(timezone=True),
+        server_default=func.now(),
+        server_onupdate=func.now(),
+    )
+
+    def __repr__(self) -> str:
+        return repr_table(self)
+
+
+class ShopList(Base):
+    __tablename__ = "shop_list"
+
+    uid: Mapped[uuid.UUID] = mapped_column(
+        types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
+    )
+    name = Column(Text, nullable=False)
+    array_username = Column(ARRAY(Text), nullable=False)
+    items = Column(ARRAY(Text), nullable=True)
+
+    update_time = Column(
         types.DateTime(timezone=True),
         server_default=func.now(),
         server_onupdate=func.now(),
