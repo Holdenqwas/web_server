@@ -1,4 +1,4 @@
-from sqlalchemy import select, UUID, update
+from sqlalchemy import select, UUID, update, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.crud.users import get_user
 from app.models import db_model
@@ -19,18 +19,46 @@ async def user_add_shop_list(username: str, uid: UUID, db: AsyncSession):
             await db.execute(stmt)
         else:
             user.array_shop_list = [uid]
+
+
+        stmt = select(db_model.ShopList).where(db_model.ShopList.uid == uid)
+        result = await db.execute(stmt)
+        db_data = result.scalars().first()
+
+        arr_users = set(db_data.array_username)
+        arr_users.add(username)
+
+        stmt = (
+                update(db_model.ShopList)
+                .values(array_username=list(arr_users))
+                .where(db_model.ShopList.uid == uid)
+        )
+        await db.execute(stmt)
         return user
+    return None
+
+
+async def get_names_shop_list(username: str, db: AsyncSession):
+    user = await get_user(username, db)
+
+    if user.array_shop_list:
+        stmt = select(db_model.ShopList).where(
+            db_model.ShopList.uid.in_(user.array_shop_list)
+        )
+        result = await db.execute(stmt)
+        db_data = result.scalars().all()
+        return [item.name for item in db_data]
     return None
 
 
 async def get_shop_list(username: str, name: str, db: AsyncSession):
     user = await get_user(username, db)
-
     stmt = select(db_model.ShopList).where(
-        db_model.ShopList.uid.in_(user.array_shop_list),
-        db_model.ShopList.name == name,
+        and_(db_model.ShopList.uid.in_(user.array_shop_list),
+             db_model.ShopList.name == name)
     )
     result = await db.execute(stmt)
+
     if result:
         db_data = result.scalars().first()
         return db_data
@@ -80,7 +108,7 @@ async def add_items_to_shop_list(
     shop_list = await get_shop_list(username, name, db)
 
     if shop_list and items:
-        items = items.split("\n")
+        items = [item.strip() for item in items.split("\n")]
         if shop_list.items:
             new_arr_items = list(set(shop_list.items + items))
         else:
@@ -97,6 +125,7 @@ async def del_item_to_shop_list(
     username: str, name: str, item: str, db: AsyncSession
 ):
     shop_list = await get_shop_list(username, name, db)
+
     if shop_list:
         shop_list.items = [val for val in shop_list.items if val != item]
         db.add(shop_list)

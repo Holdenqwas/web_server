@@ -21,6 +21,16 @@ async def add_user(
     return await crud.user_add_shop_list(data.username, data.uid, db)
 
 
+@router.get("/get_names_shop_list", response_model=shemas_shop.NamesShopList)
+async def get_names_all_shop_list_for_user(
+    username: str = Query(default="string"),
+    # user: str = Depends(require_user),
+    db: AsyncSession = Depends(get_db),
+):
+    names = await crud.get_names_shop_list(username, db)
+    return shemas_shop.NamesShopList(names=names)
+
+
 @router.get("/get_shop_list", response_model=shemas_shop.ShopListDTO)
 async def get_shop_list(
     username: str = Query(default="string"),
@@ -79,6 +89,7 @@ async def del_item_from_shop_list(
     # user: str = Depends(require_user),
     db: AsyncSession = Depends(get_db),
 ):
+    
     return await crud.del_item_to_shop_list(
         username, name, item, db
     )

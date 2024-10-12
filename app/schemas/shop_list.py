@@ -13,6 +13,11 @@ class ShopListDTO(BaseSchema):
     update_time: datetime
 
 
+
+class NamesShopList(BaseSchema):
+    names: Optional[List[str]] = None
+
+
 class CreateShopList(BaseSchema):
     username: str
     name: str
