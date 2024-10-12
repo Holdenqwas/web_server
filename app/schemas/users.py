@@ -1,5 +1,6 @@
 from datetime import datetime
-from typing import Optional
+from pydantic import UUID4
+from typing import Optional, List
 
 from app.schemas.shared import BaseSchema
 
@@ -35,3 +36,4 @@ class User(BaseSchema):
     name_exer_train3: str | None
     name_exer_train4: str | None
     name_exer_train5: str | None
+    array_shop_list: List[UUID4] | None

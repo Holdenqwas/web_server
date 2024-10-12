@@ -14,7 +14,7 @@ router = APIRouter()
 @router.post("/create", response_model=users_schema.User)
 async def create_user(
     data: users_schema.CreateUser,
-    user: str = Depends(require_user),
+    # user: str = Depends(require_user),
     db: AsyncSession = Depends(get_db),
 ):
     result = await crud.create_user(data, db)

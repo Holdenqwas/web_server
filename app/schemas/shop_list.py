@@ -1,4 +1,5 @@
 from pydantic import Field, UUID4
+from datetime import datetime
 from typing import Optional, List
 
 from app.schemas.shared import BaseSchema
@@ -6,9 +7,15 @@ from app.schemas.shared import BaseSchema
 
 
 class ShopListDTO(BaseSchema):
-    username: str
+    array_username: List[str]
     name: str
     items: Optional[List[str]] = None
+    update_time: datetime
+
+
+class CreateShopList(BaseSchema):
+    username: str
+    name: str
 
 
 class AttachShopList(BaseSchema):
@@ -20,3 +27,9 @@ class DelItem(BaseSchema):
     username: str
     name: str
     item: str
+
+
+class AddItems(BaseSchema):
+    username: str
+    name: str
+    items: str

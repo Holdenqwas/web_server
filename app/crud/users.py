@@ -20,6 +20,7 @@ async def create_user(data: schema.CreateUser, db: AsyncSession):
 
     new_user = db_model.Users(**data.model_dump(exclude_none=True))
     new_user.allow_access = True
+    new_user.array_shop_list = []
     db.add(new_user)
     return new_user
 
