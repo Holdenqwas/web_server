@@ -7,7 +7,7 @@ from app.schemas.shared import BaseSchema
 
 
 class ShopListDTO(BaseSchema):
-    array_username: List[str]
+    array_user_id: List[int]
     name: str
     items: Optional[List[str]] = None
     update_time: datetime
@@ -19,22 +19,22 @@ class NamesShopList(BaseSchema):
 
 
 class CreateShopList(BaseSchema):
-    username: str
+    user_id: int
     name: str
 
 
 class AttachShopList(BaseSchema):
-    username: str
+    user_id: int
     uid: UUID4
 
 
 class DelItem(BaseSchema):
-    username: str
+    user_id: int
     name: str
     item: str
 
 
 class AddItems(BaseSchema):
-    username: str
+    user_id: int
     name: str
     items: str

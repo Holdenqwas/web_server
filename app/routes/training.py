@@ -11,15 +11,15 @@ router = APIRouter()
 
 
 @router.get(
-    "/name_trainings/{username}",
+    "/name_trainings/{user_id}",
     response_model=training_schema.NameTrainingsDTO,
 )
 async def create_training_all(
-    username: str,
+    user_id: int,
     user: str = Depends(require_user),
     db: AsyncSession = Depends(get_db),
 ):
-    result = await crud.get_name_trains(username, db)
+    result = await crud.get_name_trains(user_id, db)
 
     if not result:
         raise HTTPException(status_code=404, detail="Cant get trainings")

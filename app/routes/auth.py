@@ -15,7 +15,7 @@ ACCESS_TOKEN_EXPIRED_IN = int(os.getenv("EXPIRED_IN"))
 async def login(payload: OAuth2PasswordRequestForm = Depends(), response: Response = None):
     if os.getenv('IS_NEED_GENERATE_TOKEN', 'False') == 'True':
         # need verify payload
-        access_token = generate_token(payload.username, timedelta(
+        access_token = generate_token(payload.user_id, timedelta(
             minutes=ACCESS_TOKEN_EXPIRED_IN))
 
         response.set_cookie("access_token", access_token,

@@ -6,6 +6,7 @@ from sqlalchemy import (
     Float,
     ForeignKey,
     Integer,
+    BigInteger,
     Text,
     text,
     types,
@@ -37,7 +38,7 @@ class TrainingAll(Base):
     uid: Mapped[uuid.UUID] = mapped_column(
         types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
-    user_name = Column(Text, nullable=False)
+    user_id = Column(BigInteger, nullable=True)
     weight = Column(Float, nullable=True)
     train1_uid = Column(types.Uuid, ForeignKey("train1.uid"), nullable=True)
     train2_uid = Column(types.Uuid, ForeignKey("train2.uid"), nullable=True)
@@ -203,7 +204,8 @@ class Users(Base):
     uid: Mapped[uuid.UUID] = mapped_column(
         types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
-    user_name = Column(Text, unique=True)
+    username = Column(Text, unique=True, nullable=True)
+    user_id = Column(BigInteger, unique=True)
     last_date_license = Column(types.DateTime(timezone=True))
     allow_access = Column(Boolean)
     name_trainings = Column(Text, nullable=True, server_default=text(""))
@@ -231,7 +233,7 @@ class ShopList(Base):
         types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
     name = Column(Text, nullable=False)
-    array_username = Column(ARRAY(Text), nullable=False)
+    array_user_id = Column(ARRAY(BigInteger), nullable=True)
     items = Column(ARRAY(Text), nullable=True)
 
     update_time = Column(

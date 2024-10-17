@@ -27,5 +27,5 @@ async def get_last_exercise(
     db: AsyncSession = Depends(get_db),
 ):
     return await crud.get_last_exercise(
-        data.user_name, data.name_training, data.name_exercise, db
+        data.user_id, data.name_training, data.name_exercise, db
     )

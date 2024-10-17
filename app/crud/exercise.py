@@ -11,11 +11,11 @@ from .training import (
 
 
 async def write_exercise(data: schema.ExerciseDTO, db: AsyncSession):
-    train = await get_training(data.user_name, db)
+    train = await get_training(data.user_id, db)
     uid = getattr(train, f"train{train.index_train}_uid")
     model = db_model.get_model(f"train{train.index_train}")
 
-    user = await get_user(data.user_name, db)
+    user = await get_user(data.user_id, db)
     name_exercise = getattr(user, f"name_exer_train{train.index_train}").split(
         ","
     )
@@ -31,12 +31,12 @@ async def write_exercise(data: schema.ExerciseDTO, db: AsyncSession):
 
 
 async def get_last_exercise(
-    user_name: str, name_train: str, name_exercise: str, db: AsyncSession
+    user_id: str, name_train: str, name_exercise: str, db: AsyncSession
 ):
     index_train, index_exer = await get_index_train_and_exercise(
-        user_name, name_train, name_exercise, db
+        user_id, name_train, name_exercise, db
     )
-    train = await get_prev_training(user_name, index_train, db)
+    train = await get_prev_training(user_id, index_train, db)
     if not train:
         return "Данных еще нет"
     uid = getattr(train, f"train{train.index_train}_uid")

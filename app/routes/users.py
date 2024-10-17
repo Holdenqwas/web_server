@@ -60,14 +60,14 @@ async def update_name_trainings(
 
 
 @router.delete(
-    "/delete_trainings/{user_name}", response_model=users_schema.User
+    "/delete_trainings/{user_id}", response_model=users_schema.User
 )
 async def delete_trainings(
-    user_name: str,
+    user_id: str,
     user: str = Depends(require_user),
     db: AsyncSession = Depends(get_db),
 ):
-    result = await crud.delete_trainings(user_name, db)
+    result = await crud.delete_trainings(user_id, db)
 
     return result
 

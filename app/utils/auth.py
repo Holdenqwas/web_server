@@ -24,9 +24,9 @@ def verify_token(token: str):
         return None
 
 
-def generate_token(user_name: str, timedelta_for_expiration=timedelta(days=10)):
+def generate_token(user_id: str, timedelta_for_expiration=timedelta(days=10)):
     expiration = datetime.utcnow() + timedelta_for_expiration
-    encoded_jwt = jwt.encode({"exp": expiration, "scopes": user_name}, os.getenv("JWT_KEY"), algorithm="HS256")
+    encoded_jwt = jwt.encode({"exp": expiration, "scopes": user_id}, os.getenv("JWT_KEY"), algorithm="HS256")
     if isinstance(encoded_jwt, bytes):
         encoded_jwt = encoded_jwt.decode("utf-8")
 
@@ -41,9 +41,9 @@ def decode_token(token: str):
 
 
 async def require_user(token: str = Depends(Oauth2Scheme)):
-    user_name = verify_token(token)
+    user_id = verify_token(token)
 
-    if not user_name:
+    if not user_id:
         raise HTTPException(status_code=403, detail="Invalid token")
 
-    return user_name
+    return user_id
