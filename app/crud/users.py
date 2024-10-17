@@ -4,8 +4,8 @@ from app.schemas import users as schema
 from app.models import db_model
 
 
-async def get_user(user_name: str, db: AsyncSession):
-    stmt = select(db_model.Users).where(db_model.Users.user_name == user_name)
+async def get_user(user_id: str, db: AsyncSession):
+    stmt = select(db_model.Users).where(db_model.Users.user_id == user_id)
     result = await db.execute(stmt)
     if result:
         db_data = result.scalars().first()
@@ -14,7 +14,7 @@ async def get_user(user_name: str, db: AsyncSession):
 
 
 async def create_user(data: schema.CreateUser, db: AsyncSession):
-    user = await get_user(data.user_name, db)
+    user = await get_user(data.user_id, db)
     if user:
         return user
 
@@ -26,7 +26,7 @@ async def create_user(data: schema.CreateUser, db: AsyncSession):
 
 
 async def update_date_license(data: schema.UpdateDateLicense, db: AsyncSession):
-    user = await get_user(data.user_name, db)
+    user = await get_user(data.user_id, db)
     if user:
         user.last_date_license = data.last_date_license
         db.add(user)
@@ -34,7 +34,7 @@ async def update_date_license(data: schema.UpdateDateLicense, db: AsyncSession):
 
 
 async def update_name_trainings(data: schema.NameTrainings, db: AsyncSession):
-    user = await get_user(data.user_name, db)
+    user = await get_user(data.user_id, db)
     if user:
         arr_names = [item.strip() for item in data.names.split(",")]
         if arr_names:
@@ -43,11 +43,11 @@ async def update_name_trainings(data: schema.NameTrainings, db: AsyncSession):
     return user
 
 
-async def delete_trainings(user_name: str, db: AsyncSession):
-    user = await get_user(user_name, db)
+async def delete_trainings(user_id: str, db: AsyncSession):
+    user = await get_user(user_id, db)
     if user:
         stmt = delete(db_model.TrainingAll).where(
-            db_model.TrainingAll.user_name == user_name
+            db_model.TrainingAll.user_id == user_id
         )
         await db.execute(stmt)
         user.name_trainings = ""
@@ -61,7 +61,7 @@ async def delete_trainings(user_name: str, db: AsyncSession):
 
 
 async def update_name_exercises(data: schema.NameExercises, db: AsyncSession):
-    user = await get_user(data.user_name, db)
+    user = await get_user(data.user_id, db)
     if user:
         arr_names = [item.strip() for item in data.names.split(",")]
         name_trains = user.name_trainings.split(",")
