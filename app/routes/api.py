@@ -1,7 +1,8 @@
 from fastapi import APIRouter
-from app.routes import training, auth, users, exercise, shop_list
+from app.routes import training, auth, users, exercise, shop_list, alice
 
 router = APIRouter()
+router.include_router(alice.router, prefix="/alice", tags=["Alice"])
 router.include_router(auth.router, tags=["Auth"])
 router.include_router(exercise.router, prefix="/exercise", tags=["Exercise"])
 router.include_router(shop_list.router, prefix="/shop_list", tags=["Shop list"])
