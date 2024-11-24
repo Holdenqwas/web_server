@@ -208,12 +208,12 @@ class Users(Base):
     user_id = Column(BigInteger, unique=True)
     last_date_license = Column(types.DateTime(timezone=True))
     allow_access = Column(Boolean)
-    name_trainings = Column(Text, nullable=True, server_default=text(""))
-    name_exer_train1 = Column(Text, nullable=True, server_default=text(""))
-    name_exer_train2 = Column(Text, nullable=True, server_default=text(""))
-    name_exer_train3 = Column(Text, nullable=True, server_default=text(""))
-    name_exer_train4 = Column(Text, nullable=True, server_default=text(""))
-    name_exer_train5 = Column(Text, nullable=True, server_default=text(""))
+    name_trainings = Column(Text, nullable=True)
+    name_exer_train1 = Column(Text, nullable=True)
+    name_exer_train2 = Column(Text, nullable=True)
+    name_exer_train3 = Column(Text, nullable=True)
+    name_exer_train4 = Column(Text, nullable=True)
+    name_exer_train5 = Column(Text, nullable=True)
 
     array_shop_list = Column(ARRAY(UUID), nullable=True)
     date = Column(
