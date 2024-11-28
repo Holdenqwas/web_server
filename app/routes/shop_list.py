@@ -1,6 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, HTTPException, Path, Depends, Query
-from typing import Union
+from fastapi import APIRouter, Depends, Query
 from pydantic import UUID4
 
 from app.utils.database import get_db
@@ -42,7 +41,7 @@ async def get_shop_list(
 
 
 @router.get("/get_uid_shop_list", response_model=UUID4)
-async def get_shop_list(
+async def get_uid_shop_list(
     user_id: int = Query(default=1),
     name: str = Query(default="Общий"),
     # user: str = Depends(require_user),
@@ -81,7 +80,9 @@ async def add_items_to_shop_list(
     )
 
 
-@router.delete("/del_item_from_shop_list", response_model=shemas_shop.ShopListDTO)
+@router.delete(
+    "/del_item_from_shop_list", response_model=shemas_shop.ShopListDTO
+)
 async def del_item_from_shop_list(
     user_id: int = Query(default=1),
     name: str = Query(default="Общий"),
@@ -89,7 +90,5 @@ async def del_item_from_shop_list(
     # user: str = Depends(require_user),
     db: AsyncSession = Depends(get_db),
 ):
-    
-    return await crud.del_item_to_shop_list(
-        user_id, name, item, db
-    )
+
+    return await crud.del_item_to_shop_list(user_id, name, item, db)

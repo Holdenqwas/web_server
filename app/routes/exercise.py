@@ -1,12 +1,11 @@
-from pydantic.v1.schema import schema
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, HTTPException, Path, Depends
-from typing import Union
 
-from app.utils.database import get_db
-from app.utils.auth import require_user
 from app.crud import exercise as crud
 from app.schemas import exercise as exercise_schema
+from app.utils.auth import require_user
+from app.utils.database import get_db
+
 
 router = APIRouter()
 

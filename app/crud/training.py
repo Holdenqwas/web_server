@@ -55,7 +55,7 @@ async def get_prev_training(user_id: str, index_train, db: AsyncSession):
         .where(
             and_(
                 db_model.TrainingAll.user_id == user_id,
-                db_model.TrainingAll.index_train == index_train
+                db_model.TrainingAll.index_train == index_train,
             )
         )
         .order_by(db_model.TrainingAll.date.desc())

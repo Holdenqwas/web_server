@@ -20,7 +20,6 @@ async def user_add_shop_list(user_id: str, uid: UUID, db: AsyncSession):
         else:
             user.array_shop_list = [uid]
 
-
         stmt = select(db_model.ShopList).where(db_model.ShopList.uid == uid)
         result = await db.execute(stmt)
         db_data = result.scalars().first()
@@ -29,9 +28,9 @@ async def user_add_shop_list(user_id: str, uid: UUID, db: AsyncSession):
         arr_users.add(user_id)
 
         stmt = (
-                update(db_model.ShopList)
-                .values(array_user_id=list(arr_users))
-                .where(db_model.ShopList.uid == uid)
+            update(db_model.ShopList)
+            .values(array_user_id=list(arr_users))
+            .where(db_model.ShopList.uid == uid)
         )
         await db.execute(stmt)
         return user
@@ -54,8 +53,10 @@ async def get_names_shop_list(user_id: str, db: AsyncSession):
 async def get_shop_list(user_id: str, name: str, db: AsyncSession):
     user = await get_user(user_id, db)
     stmt = select(db_model.ShopList).where(
-        and_(db_model.ShopList.uid.in_(user.array_shop_list),
-             db_model.ShopList.name == name)
+        and_(
+            db_model.ShopList.uid.in_(user.array_shop_list),
+            db_model.ShopList.name == name,
+        )
     )
     result = await db.execute(stmt)
 

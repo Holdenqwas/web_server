@@ -14,7 +14,7 @@ router = APIRouter()
     "/name_trainings/{user_id}",
     response_model=training_schema.NameTrainingsDTO,
 )
-async def create_training_all(
+async def create_training(
     user_id: int,
     user: str = Depends(require_user),
     db: AsyncSession = Depends(get_db),

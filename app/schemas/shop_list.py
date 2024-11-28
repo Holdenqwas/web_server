@@ -1,9 +1,8 @@
-from pydantic import Field, UUID4
+from pydantic import UUID4
 from datetime import datetime
 from typing import Optional, List
 
 from app.schemas.shared import BaseSchema
-
 
 
 class ShopListDTO(BaseSchema):
@@ -11,7 +10,6 @@ class ShopListDTO(BaseSchema):
     name: str
     items: Optional[List[str]] = None
     update_time: datetime
-
 
 
 class NamesShopList(BaseSchema):

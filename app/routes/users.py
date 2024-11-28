@@ -1,7 +1,5 @@
-from pydantic.v1.schema import schema
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, HTTPException, Path, Depends
-from typing import Union
+from fastapi import APIRouter, HTTPException, Depends
 
 from app.utils.database import get_db
 from app.utils.auth import require_user
@@ -59,9 +57,7 @@ async def update_name_trainings(
     return result
 
 
-@router.delete(
-    "/delete_trainings/{user_id}", response_model=users_schema.User
-)
+@router.delete("/delete_trainings/{user_id}", response_model=users_schema.User)
 async def delete_trainings(
     user_id: str,
     user: str = Depends(require_user),
