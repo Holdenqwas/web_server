@@ -38,3 +38,7 @@ class User(BaseSchema):
     name_exer_train4: str | None
     name_exer_train5: str | None
     array_shop_list: List[UUID4] | None
+
+
+class VerificateCode(BaseSchema):
+    code: int

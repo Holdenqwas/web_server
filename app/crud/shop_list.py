@@ -100,6 +100,11 @@ async def delete_shop_list(user_id: str, name: str, db: AsyncSession):
                 item for item in shop_list.array_user_id if item != user_id
             ]
             db.add(shop_list)
+
+    if shop_list.uid == user.default_shop_list_uid:
+        user.default_shop_list_uid = None
+        db.add(user)
+
     return user
 
 

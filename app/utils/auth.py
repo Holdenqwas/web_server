@@ -27,7 +27,8 @@ def verify_token_service(token: str):
         if decoded["scopes"] != os.getenv("MY_NAME"):
             return None
         return decoded["scopes"]
-    except:
+    except Exception as e:
+        print(e.args)
         return None
 
 
@@ -51,7 +52,7 @@ def decode_token(token: str):
         return None
 
 
-async def require_user(token: str = Depends(Oauth2Scheme)):
+async def require_token_service(token: str = Depends(Oauth2Scheme)):
     user_id = verify_token_service(token)
 
     if not user_id:
