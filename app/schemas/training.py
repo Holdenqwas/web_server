@@ -27,4 +27,4 @@ class CreateTrain(BaseSchema):
 class NameExercises(BaseSchema):
     user_id: int
     name_training: str
-    name_exercises: Optional[List[str]] = str
+    name_exercises: Optional[List[str]] = None

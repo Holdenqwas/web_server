@@ -86,10 +86,19 @@ async def login(
             "client_id": payload.client_id,
             "scope": payload.scope,
         }
-        requests.request(
-            "GET",
-            url="https://social.yandex.net/broker/redirect",
-            params=params,
-        )
+        print(params)
+        # requests.request(
+        #     "GET",
+        #     url="https://social.yandex.net/broker/redirect",
+        #     params=params,
+        # )
     else:
         raise HTTPException(status_code=404, detail="Что-то пошло не так")
+    
+
+@router.get("/generate_verify_code")
+async def generate_verify_code(
+    user_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    await crud.generate_verify_code(user_id, db)

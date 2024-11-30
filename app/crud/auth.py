@@ -29,9 +29,10 @@ async def verify_auth(data: schema.AuthDTO, db: AsyncSession):
     )
 
 
-async def generate_verify_code(data: schema.AuthDTO, db: AsyncSession):
-    user = await get_user(data.user_id, db)
+async def generate_verify_code(user_id: int, db: AsyncSession):
+    user = await get_user(user_id, db)
     if not user:
         raise HTTPException(status_code=404, detail="Cant find user")
 
     user.vefiry_code = round(random.random() * 100_000)
+    db.add(user)

@@ -206,7 +206,6 @@ class Users(Base):
     )
     username = Column(Text, unique=True, nullable=True)
     user_id = Column(BigInteger, unique=True)
-    client_id = Column(BigInteger, unique=True)
     vefiry_code = Column(Integer, nullable=True)
     last_date_license = Column(types.DateTime(timezone=True))
     allow_access = Column(Boolean)
