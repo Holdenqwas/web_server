@@ -206,6 +206,7 @@ class Users(Base):
     )
     username = Column(Text, unique=True, nullable=True)
     user_id = Column(BigInteger, unique=True)
+    vefiry_code = Column(Integer, nullable=True)
     last_date_license = Column(types.DateTime(timezone=True))
     allow_access = Column(Boolean)
     name_trainings = Column(Text, nullable=True)
@@ -216,6 +217,8 @@ class Users(Base):
     name_exer_train5 = Column(Text, nullable=True)
 
     array_shop_list = Column(ARRAY(UUID), nullable=True)
+    default_shop_list_uid = Column(UUID, nullable=True)
+
     date = Column(
         types.DateTime(timezone=True),
         server_default=func.now(),

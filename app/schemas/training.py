@@ -22,9 +22,9 @@ class TrainingDTO(BaseSchema):
 class CreateTrain(BaseSchema):
     user_id: int
     name_training: str = Field(examples=["breast"])
-    
+
 
 class NameExercises(BaseSchema):
     user_id: int
     name_training: str
-    name_exercises: Optional[List[str]] = str
+    name_exercises: Optional[List[str]] = None
