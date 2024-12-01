@@ -1,6 +1,6 @@
 from sqlalchemy import select, UUID, update, and_
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.crud.users import get_user
+from app.crud.users import get_user, get_user_uid
 from app.models import db_model
 
 
@@ -57,6 +57,19 @@ async def get_shop_list(user_id: str, name: str, db: AsyncSession):
             db_model.ShopList.uid.in_(user.array_shop_list),
             db_model.ShopList.name == name,
         )
+    )
+    result = await db.execute(stmt)
+
+    if result:
+        db_data = result.scalars().first()
+        return db_data
+    return None
+
+
+async def get_default_shop_list(user_uid: str, db: AsyncSession):
+    user = await get_user_uid(user_uid, db)
+    stmt = select(db_model.ShopList).where(
+        db_model.ShopList.uid == user.default_shop_list_uid
     )
     result = await db.execute(stmt)
 
@@ -137,3 +150,20 @@ async def del_item_to_shop_list(
         db.add(shop_list)
 
         return shop_list
+
+
+async def add_items_to_shop_list_from_alice(user_uid: str, items: str, db: AsyncSession):
+    shop_list = await get_default_shop_list(user_uid, db)
+
+    if shop_list and items:
+        items = [item.strip() for item in items.split("запятая")]
+        if shop_list.items:
+            new_arr_items = list(set(shop_list.items + items))
+        else:
+            new_arr_items = list(set(items))
+        new_arr_items.sort()
+        shop_list.items = new_arr_items
+
+        db.add(shop_list)
+
+        return True

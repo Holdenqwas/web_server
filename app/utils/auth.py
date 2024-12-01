@@ -3,7 +3,7 @@ from datetime import timedelta, datetime
 import jwt
 import os
 from fastapi import Depends, HTTPException
-from app.schemas.auth import Oauth2Scheme
+from app.schemas.auth import Oauth2SchemeServices, Oauth2Scheme
 
 
 def verify_token_service(token: str):
@@ -45,14 +45,34 @@ def generate_token(user_id: str, timedelta_for_expiration=timedelta(days=1)):
     return encoded_jwt
 
 
-def decode_token(token: str):
+def decode_token(token: str = Depends(Oauth2Scheme)):
+    if not token: return None
     try:
-        jwt.decode(token, options={"verify_signature": False})
-    except jwt.ExpiredSignatureError:
+        token = token[7:].encode('utf-8')
+        
+        jwt_options = {
+            "verify_signature": True,
+            "verify_exp": True,
+            "verify_nbf": False,
+            "verify_iat": False,
+            "verify_aud": False,
+        }
+        decoded = jwt.decode(
+            token,
+            key=os.getenv("JWT_KEY"),
+            algorithms=[
+                "HS256",
+            ],
+            options=jwt_options,
+        )
+        print("token", decoded)
+        return decoded["scopes"]
+    except Exception as e:
+        print(e.args)
         return None
 
 
-async def require_token_service(token: str = Depends(Oauth2Scheme)):
+async def require_token_service(token: str = Depends(Oauth2SchemeServices)):
     user_id = verify_token_service(token)
 
     if not user_id:

@@ -13,6 +13,15 @@ async def get_user(user_id: str, db: AsyncSession):
     return None
 
 
+async def get_user_uid(user_uid: str, db: AsyncSession):
+    stmt = select(db_model.Users).where(db_model.Users.uid == user_uid)
+    result = await db.execute(stmt)
+    if result:
+        db_data = result.scalars().first()
+        return db_data
+    return None
+
+
 async def create_user(data: schema.CreateUser, db: AsyncSession):
     user = await get_user(data.user_id, db)
     if user:
