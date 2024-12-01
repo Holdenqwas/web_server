@@ -49,7 +49,7 @@ async def token(
 async def create_token(code: str):
     expires_in = 86400
     access_token = generate_token(code, timedelta(seconds=expires_in))
-    refresh_token = generate_token(code, timedelta(seconds=expires_in * 10))
+    refresh_token = generate_token(code, timedelta(seconds=expires_in * 30))
 
     return {
         "access_token": access_token,
@@ -63,7 +63,7 @@ async def create_token(code: str):
 async def refresh_token(code: str):
     expires_in = 86400
     access_token = generate_token(code, timedelta(seconds=expires_in))
-    refresh_token = generate_token(code, timedelta(seconds=expires_in * 10))
+    refresh_token = generate_token(code, timedelta(seconds=expires_in * 30))
 
     return {
         "access_token": access_token,

@@ -1,9 +1,10 @@
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2
 
 
 from app.schemas.shared import BaseSchema
 
-Oauth2Scheme = OAuth2PasswordBearer(tokenUrl="/token_for_services")
+Oauth2SchemeServices = OAuth2PasswordBearer(tokenUrl="/token_for_services")
+Oauth2Scheme = OAuth2(auto_error=False)
 
 
 class AuthDTO(BaseSchema):
