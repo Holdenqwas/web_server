@@ -23,7 +23,7 @@ async def verify_auth(data: schema.AuthDTO, db: AsyncSession):
         )
 
     user = await get_user(data.user_id, db)
-    print(user)
+
     if not user:
         raise HTTPException(
             status_code=404, detail="Введено неправильное первое число"
