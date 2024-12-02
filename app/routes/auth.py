@@ -1,16 +1,17 @@
 import os
 import requests
-from datetime import timedelta
+import urllib.parse
 
+from datetime import timedelta
 from fastapi import APIRouter, Response, HTTPException
 from fastapi.params import Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.crud import auth as crud
 from app.schemas.auth import AuthDTO
 from app.utils.auth import generate_token
 from app.utils.database import get_db
-from app.crud import auth as crud
 
 
 router = APIRouter()
@@ -88,15 +89,24 @@ async def login(
         }
 
         print(params)
-        res = requests.request(
-            "GET",
-            url="https://social.yandex.net/broker/redirect",
-            params=params,
-        )
-        print(res.status_code, res.text)
+        # res = requests.request(
+        #     "GET",
+        #     url="https://social.yandex.net/broker/redirect",
+        #     params=params,
+        # )
+        # print(res.status_code, res.text)
+
+        url = 'https://social.yandex.net/broker/redirect?'
+
+        formated_url = url + urllib.parse.urlencode(params)
+        print(formated_url)
+
+        return {
+            "url": formated_url,
+        }
     else:
         raise HTTPException(status_code=404, detail="Что-то пошло не так")
-
+    
 
 # @router.get("/generate_verify_code")
 # async def generate_verify_code(
