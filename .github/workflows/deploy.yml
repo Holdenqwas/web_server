@@ -5,6 +5,10 @@ on:
     types:
       - closed
     branches: [ "master" ]
+  push:
+    branches:
+      - develop
+
 
 jobs:
   deploy:

@@ -93,7 +93,7 @@ async def login(
             url="https://social.yandex.net/broker/redirect",
             params=params,
         )
-        print(res.status_code, res.json())
+        print(res.status_code, res.text)
     else:
         raise HTTPException(status_code=404, detail="Что-то пошло не так")
 
