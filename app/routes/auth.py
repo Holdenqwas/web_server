@@ -87,11 +87,13 @@ async def login(
             "scope": payload.scope,
         }
 
-        requests.request(
+        print(params)
+        res = requests.request(
             "GET",
             url="https://social.yandex.net/broker/redirect",
             params=params,
         )
+        print(res.status_code, res)
     else:
         raise HTTPException(status_code=404, detail="Что-то пошло не так")
 

@@ -67,7 +67,6 @@ async def talk(
             response["response"]["end_session"] = True
 
         else:
-            print("add_items_to_shop_list_from_alice")
             status = await add_items_to_shop_list_from_alice(user_uid, text, db)
 
             if status:
