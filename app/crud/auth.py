@@ -53,7 +53,7 @@ async def generate_verify_code(
         raise HTTPException(status_code=404, detail="Cant find user")
 
     code = round(random.random() * 1_000_000)
-    while code == 1_000_000:
+    while code == 1_000_000 or code < 100_000:
         code = round(random.random() * 1_000_000)
 
     user.vefiry_code = code
