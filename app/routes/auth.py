@@ -1,4 +1,5 @@
 import os
+from fastapi.responses import RedirectResponse
 import requests
 import urllib.parse
 
@@ -47,10 +48,8 @@ async def token(
 
 
 @router.post("/create_token")
-async def create_token(request: Request, code: str = "", client_id: str = "", ):
+async def create_token(code: str = "", client_id: str = "", ):
     print("code, client_id", code, client_id)
-    body = await request.json()
-    print(body)
     expires_in = 86400
     access_token = generate_token(code, timedelta(seconds=expires_in))
     refresh_token = generate_token(code, timedelta(seconds=expires_in * 30))
@@ -103,10 +102,11 @@ async def login(
 
         formated_url = url + urllib.parse.urlencode(params)
         print(formated_url)
-
-        return {
-            "url": formated_url,
-        }
+        
+        return RedirectResponse(formated_url)
+        # return {
+        #     "url": formated_url,
+        # }
     else:
         raise HTTPException(status_code=404, detail="Что-то пошло не так")
     
