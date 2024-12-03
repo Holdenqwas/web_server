@@ -102,11 +102,10 @@ async def login(
 
         formated_url = url + urllib.parse.urlencode(params)
         print(formated_url)
-        
-        return RedirectResponse(formated_url)
-        # return {
-        #     "url": formated_url,
-        # }
+
+        return {
+            "url": formated_url,
+        }
     else:
         raise HTTPException(status_code=404, detail="Что-то пошло не так")
     
