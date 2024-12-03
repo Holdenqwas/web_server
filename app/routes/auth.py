@@ -49,8 +49,8 @@ async def token(
 @router.post("/create_token")
 async def create_token(request: Request, code: str = "", client_id: str = "", ):
     print("code, client_id", code, client_id)
-    print(request.json())
-    print(request.body())
+    body = await request.json()
+    print(body)
     expires_in = 86400
     access_token = generate_token(code, timedelta(seconds=expires_in))
     refresh_token = generate_token(code, timedelta(seconds=expires_in * 30))
