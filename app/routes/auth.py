@@ -46,7 +46,7 @@ async def token(
     )
 
 
-@router.get("/create_token")
+@router.post("/create_token")
 async def create_token(code: str):
     expires_in = 86400
     access_token = generate_token(code, timedelta(seconds=expires_in))
@@ -60,7 +60,7 @@ async def create_token(code: str):
     }
 
 
-@router.get("/refresh_token")
+@router.post("/refresh_token")
 async def refresh_token(code: str):
     expires_in = 86400
     access_token = generate_token(code, timedelta(seconds=expires_in))
