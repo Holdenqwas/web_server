@@ -98,13 +98,13 @@ async def login(
         # )
         # print(res.status_code, res.text)
 
-        url = 'https://social.yandex.net/broker/redirect?'
+        # url = 'https://social.yandex.net/broker/redirect?'
 
-        formated_url = url + urllib.parse.urlencode(params)
-        print(formated_url)
+        # formated_url = url + urllib.parse.urlencode(params)
+        # print(formated_url)
 
         return {
-            "url": formated_url,
+            "code": code,
         }
     else:
         raise HTTPException(status_code=404, detail="Что-то пошло не так")
