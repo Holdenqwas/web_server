@@ -3,7 +3,7 @@ import requests
 import urllib.parse
 
 from datetime import timedelta
-from fastapi import APIRouter, Response, HTTPException, Body
+from fastapi import APIRouter, Request, Response, HTTPException, Body
 from fastapi.params import Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -47,8 +47,10 @@ async def token(
 
 
 @router.post("/create_token")
-async def create_token(code: str = "", client_id: str = ""):
-    print(code, client_id)
+async def create_token(request: Request, code: str = "", client_id: str = "", ):
+    print("code, client_id", code, client_id)
+    print(request.json())
+    print(request.body())
     expires_in = 86400
     access_token = generate_token(code, timedelta(seconds=expires_in))
     refresh_token = generate_token(code, timedelta(seconds=expires_in * 30))
