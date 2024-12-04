@@ -11,6 +11,7 @@ from sqlalchemy import (
     Text,
     text,
     types,
+    TIMESTAMP
 )
 from sqlalchemy.orm import (
     declarative_base,
@@ -257,8 +258,8 @@ class VerCode(Base):
         types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
     )
     code = Column(Text, nullable=False)
-    user_uid = Column(Text, nullable=False)
-    expires_at = Column(types.TIMESTAMP, nullable=False)
+    user_id = Column(Integer, nullable=False)
+    expires_at = Column(Integer, nullable=False)
 
     def __repr__(self) -> str:
         return repr_table(self)

@@ -60,11 +60,11 @@ async def create_token(
 
     ver_code = await verify_code(code, db)
     if not ver_code:
-        HTTPException(403, "Код недействителен")
+        raise HTTPException(403, "Код недействителен")
 
-    access_token = generate_token(ver_code.user_uid, timedelta(seconds=600))
+    access_token = generate_token(ver_code.user_id, timedelta(seconds=600))
     refresh_token = generate_token(
-        ver_code.user_uid, timedelta(seconds=86400 * 30)
+        ver_code.user_id, timedelta(seconds=86400 * 30)
     )
 
     return {

@@ -1,8 +1,8 @@
-"""ver code
+"""fix
 
-Revision ID: 62f7d133dc00
-Revises: c2aaa80991cb
-Create Date: 2024-12-04 22:14:12.679412
+Revision ID: f194ca0180e8
+Revises: c267296cc5d8
+Create Date: 2024-12-04 22:56:49.806401
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '62f7d133dc00'
-down_revision: Union[str, None] = 'c2aaa80991cb'
+revision: str = 'f194ca0180e8'
+down_revision: Union[str, None] = 'c267296cc5d8'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -23,8 +23,8 @@ def upgrade() -> None:
     op.create_table('ver_code',
     sa.Column('uid', sa.Uuid(), server_default=sa.text('gen_random_uuid()'), nullable=False),
     sa.Column('code', sa.Text(), nullable=False),
-    sa.Column('user_uid', sa.Text(), nullable=False),
-    sa.Column('expires_at', sa.TIMESTAMP(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('expires_at', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('uid')
     )
     # ### end Alembic commands ###
