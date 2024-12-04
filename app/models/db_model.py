@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import (
     ARRAY,
     UUID,
@@ -247,7 +248,20 @@ class ShopList(Base):
 
     def __repr__(self) -> str:
         return repr_table(self)
+    
 
+class VerCode(Base):
+    __tablename__ = "ver_code"
+
+    uid: Mapped[uuid.UUID] = mapped_column(
+        types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
+    )
+    code = Column(Text, nullable=False)
+    user_uid = Column(Text, nullable=False)
+    expires_at = Column(types.TIMESTAMP, nullable=False)
+
+    def __repr__(self) -> str:
+        return repr_table(self)
 
 def get_model(name: str):
     if name == "train1":

@@ -2,6 +2,7 @@ import random
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.crud.ver_code import create_code
 from app.schemas import auth as schema
 from app.crud.shop_list import get_uid_shop_list
 from .users import get_user
@@ -38,7 +39,9 @@ async def verify_auth(data: schema.AuthDTO, db: AsyncSession):
 
     if user.user_id == data.user_id and user.vefiry_code == data.verify_code:
         user.vefiry_code = None
-        return str(user.uid)
+
+        code = create_code(user.user_id, db)
+        return code
 
     raise HTTPException(
         status_code=404, detail="Значения не совпадают, проверьте данные"
