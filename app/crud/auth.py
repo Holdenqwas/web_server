@@ -40,7 +40,7 @@ async def verify_auth(data: schema.AuthDTO, db: AsyncSession):
     if user.user_id == data.user_id and user.vefiry_code == data.verify_code:
         user.vefiry_code = None
 
-        code = create_code(user.user_id, db)
+        code = await create_code(user.user_id, db)
         return code
 
     raise HTTPException(
