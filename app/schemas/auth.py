@@ -13,3 +13,9 @@ class AuthDTO(BaseSchema):
     state: str
     client_id: str
     scope: str
+
+class AuthRequestToken(BaseSchema):
+    grant_type: str
+    code: str
+    redirect_uri: str
+    client_id: str

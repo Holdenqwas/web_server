@@ -10,7 +10,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud import auth as crud
-from app.schemas.auth import AuthDTO
+from app.schemas import auth as schemas
 from app.utils.auth import generate_token
 from app.utils.database import get_db
 
@@ -48,11 +48,11 @@ async def token(
 
 
 @router.post("/create_token")
-async def create_token(code: str = "", client_id: str = "", ):
-    print("code, client_id", code, client_id)
+async def create_token(body: schemas.AuthRequestToken):
+    print("body", body)
     expires_in = 86400
-    access_token = generate_token(code, timedelta(seconds=expires_in))
-    refresh_token = generate_token(code, timedelta(seconds=expires_in * 30))
+    access_token = generate_token(body.code, timedelta(seconds=expires_in))
+    refresh_token = generate_token(body.code, timedelta(seconds=expires_in * 30))
 
     return {
         "access_token": access_token,
@@ -78,7 +78,7 @@ async def refresh_token(code: str):
 
 @router.post("/login")
 async def login(
-    payload: AuthDTO,
+    payload: schemas.AuthDTO,
     db: AsyncSession = Depends(get_db),
 ):
     code = await crud.verify_auth(payload, db)
