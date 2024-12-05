@@ -106,10 +106,8 @@ async def login(
     code = await crud.verify_auth(payload, db)
     if code:
         headers = {
-            "Access-Control-Allow-Headers": "Content-Type",
             "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH",
+            "Access-Control-Allow-Methods": "Origin, X-Requested-With, Content-Type, Accept",
         }
         redirect_url = (
             f"https://social.yandex.net/broker/redirect?"
