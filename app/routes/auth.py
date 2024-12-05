@@ -79,6 +79,7 @@ async def create_token(
 async def refresh_token(
     grant_type: str = Form(...), refresh_token: str = Form(...)
 ):
+    print("refresh_token", refresh_token)
     if grant_type != "refresh_token":
         raise HTTPException(status_code=400, detail="Unsupported grant type")
     user_id = decode_token(refresh_token)
@@ -104,6 +105,14 @@ async def login(
 ):
     code = await crud.verify_auth(payload, db)
     if code:
+        headers = (
+            {
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH",
+            },
+        )
         redirect_url = (
             f"https://social.yandex.net/broker/redirect?"
             f"client_id={payload.client_id}&state={payload.state}&code={code}&scope={payload.scope}"
@@ -111,7 +120,7 @@ async def login(
 
         return RedirectResponse(url=redirect_url, status_code=302)
     else:
-        raise HTTPException(status_code=404, detail="Что-то пошло не так")
+        raise HTTPException(status_code=404, headers=headers, detail="Что-то пошло не так")
 
 
 # @router.get("/generate_verify_code")
