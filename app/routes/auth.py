@@ -61,7 +61,7 @@ async def create_token(
     if not ver_code:
         raise HTTPException(403, "Код недействителен")
 
-    access_token = generate_token(ver_code.user_id, timedelta(seconds=60))
+    access_token = generate_token(ver_code.user_id, timedelta(seconds=600))
     refresh_token = generate_token(
         ver_code.user_id, timedelta(seconds=86400 * 30)
     )
@@ -69,7 +69,7 @@ async def create_token(
     return {
         "access_token": access_token,
         "refresh_token": refresh_token,
-        "expires_in": 60,
+        "expires_in": 600,
         "token_type": "bearer",
     }
 
@@ -78,7 +78,6 @@ async def create_token(
 async def refresh_token(
     grant_type: str = Form(...), refresh_token: str = Form(...)
 ):
-    print("refresh_token", refresh_token)
     if grant_type != "refresh_token":
         raise HTTPException(status_code=400, detail="Unsupported grant type")
     user_id = decode_token(refresh_token, need_format=False)
@@ -86,13 +85,13 @@ async def refresh_token(
     if not user_id:
         HTTPException(403, "Рефреш токен не валиден")
 
-    access_token = generate_token(user_id, timedelta(seconds=60))
+    access_token = generate_token(user_id, timedelta(seconds=600))
     refresh_token = generate_token(user_id, timedelta(seconds=86400 * 30))
 
     return {
         "access_token": access_token,
         "refresh_token": refresh_token,
-        "expires_in": 60,
+        "expires_in": 600,
         "token_type": "bearer",
     }
 
