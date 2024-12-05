@@ -155,16 +155,14 @@ async def del_item_to_shop_list(
 async def add_items_to_shop_list_from_alice(user_id: int, items: str, db: AsyncSession):
     shop_list = await get_default_shop_list(user_id, db)
 
-    print("shop_list", shop_list)
     if shop_list and items:
-        print("start add items")
         items = [item.strip() for item in items.split("запятая")]
         if shop_list.items:
             new_arr_items = list(set(shop_list.items + items))
         else:
             new_arr_items = list(set(items))
         new_arr_items.sort()
-        print("new_arr_items", new_arr_items)
+
         shop_list.items = new_arr_items
 
         db.add(shop_list)

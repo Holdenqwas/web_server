@@ -64,6 +64,8 @@ async def talk(
             response["response"]["text"] = "Хороших покупок!"
             response["response"]["end_session"] = True
 
+        elif text == "":
+            response["response"]["text"] = "Я готова записывать"
         else:
             status = await add_items_to_shop_list_from_alice(user_id, text, db)
 

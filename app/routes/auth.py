@@ -54,7 +54,6 @@ async def create_token(
     code: str = Form(...),
     db: AsyncSession = Depends(get_db),
 ):
-    print("code", code)
     if grant_type != "authorization_code":
         raise HTTPException(status_code=400, detail="Unsupported grant type")
 
@@ -62,7 +61,7 @@ async def create_token(
     if not ver_code:
         raise HTTPException(403, "Код недействителен")
 
-    access_token = generate_token(ver_code.user_id, timedelta(seconds=600))
+    access_token = generate_token(ver_code.user_id, timedelta(seconds=60))
     refresh_token = generate_token(
         ver_code.user_id, timedelta(seconds=86400 * 30)
     )
@@ -70,7 +69,7 @@ async def create_token(
     return {
         "access_token": access_token,
         "refresh_token": refresh_token,
-        "expires_in": 600,
+        "expires_in": 60,
         "token_type": "bearer",
     }
 
@@ -87,13 +86,13 @@ async def refresh_token(
     if not user_id:
         HTTPException(403, "Рефреш токен не валиден")
 
-    access_token = generate_token(user_id, timedelta(seconds=600))
+    access_token = generate_token(user_id, timedelta(seconds=60))
     refresh_token = generate_token(user_id, timedelta(seconds=86400 * 30))
 
     return {
         "access_token": access_token,
         "refresh_token": refresh_token,
-        "expires_in": 600,
+        "expires_in": 60,
         "token_type": "bearer",
     }
 
@@ -105,23 +104,8 @@ async def login(
 ):
     code = await crud.verify_auth(payload, db)
     if code:
-        # headers = {
-        #     "Access-Control-Allow-Origin": "*",
-        #     "Access-Control-Allow-Methods": "Origin, X-Requested-With, Content-Type, Accept",
-        # }
         redirect_url = f"https://social.yandex.net/broker/redirect?client_id={payload.client_id}&state={payload.state}&code={code}&scope={payload.scope}"
 
-        # return RedirectResponse(
-        #     url=redirect_url, headers=headers, status_code=302
-        # )
         return {"url": redirect_url}
     else:
         raise HTTPException(status_code=404, detail="Что-то пошло не так")
-
-
-# @router.get("/generate_verify_code")
-# async def generate_verify_code(
-#     user_id: int,
-#     db: AsyncSession = Depends(get_db),
-# ):
-#     await crud.generate_verify_code(user_id, db)
