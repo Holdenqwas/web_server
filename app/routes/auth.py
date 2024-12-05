@@ -105,18 +105,16 @@ async def login(
 ):
     code = await crud.verify_auth(payload, db)
     if code:
-        headers = {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "Origin, X-Requested-With, Content-Type, Accept",
-        }
-        redirect_url = (
-            f"https://social.yandex.net/broker/redirect?"
-            f"client_id={payload.client_id}&state={payload.state}&code={code}&scope={payload.scope}"
-        )
+        # headers = {
+        #     "Access-Control-Allow-Origin": "*",
+        #     "Access-Control-Allow-Methods": "Origin, X-Requested-With, Content-Type, Accept",
+        # }
+        redirect_url = f"https://social.yandex.net/broker/redirect?client_id={payload.client_id}&state={payload.state}&code={code}&scope={payload.scope}"
 
-        return RedirectResponse(
-            url=redirect_url, headers=headers, status_code=302
-        )
+        # return RedirectResponse(
+        #     url=redirect_url, headers=headers, status_code=302
+        # )
+        return {"url": redirect_url}
     else:
         raise HTTPException(status_code=404, detail="Что-то пошло не так")
 
