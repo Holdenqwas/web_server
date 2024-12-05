@@ -46,10 +46,14 @@ def generate_token(user_id: int, timedelta_for_expiration=timedelta(days=1)) -> 
     return encoded_jwt
 
 
-def decode_token(token: str = Depends(Oauth2Scheme)) -> int | None:
+def decode_token(token: str = Depends(Oauth2Scheme), need_format: bool = True) -> int | None:
     if not token: return None
     try:
-        token = token[7:].encode('utf-8')
+        if need_format:
+            token = token[7:]
+
+        token = token.encode('utf-8')
+
         
         jwt_options = {
             "verify_signature": True,

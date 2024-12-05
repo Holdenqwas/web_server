@@ -81,7 +81,7 @@ async def refresh_token(
     print("refresh_token", refresh_token)
     if grant_type != "refresh_token":
         raise HTTPException(status_code=400, detail="Unsupported grant type")
-    user_id = decode_token(refresh_token)
+    user_id = decode_token(refresh_token, need_format=False)
 
     if not user_id:
         HTTPException(403, "Рефреш токен не валиден")
