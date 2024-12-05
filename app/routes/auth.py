@@ -81,13 +81,13 @@ async def refresh_token(
 ):
     if grant_type != "refresh_token":
         raise HTTPException(status_code=400, detail="Unsupported grant type")
-    user_uid = decode_token(refresh_token)
+    user_id = decode_token(refresh_token)
 
-    if not user_uid:
+    if not user_id:
         HTTPException(403, "Рефреш токен не валиден")
 
-    access_token = generate_token(user_uid, timedelta(seconds=600))
-    refresh_token = generate_token(user_uid, timedelta(seconds=86400 * 30))
+    access_token = generate_token(user_id, timedelta(seconds=600))
+    refresh_token = generate_token(user_id, timedelta(seconds=86400 * 30))
 
     return {
         "access_token": access_token,

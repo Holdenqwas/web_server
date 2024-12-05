@@ -32,11 +32,11 @@ def verify_token_service(token: str):
         return None
 
 
-def generate_token(user_id: str, timedelta_for_expiration=timedelta(days=1)):
+def generate_token(user_id: int, timedelta_for_expiration=timedelta(days=1)) -> str:
 
     expiration = datetime.utcnow() + timedelta_for_expiration
     encoded_jwt = jwt.encode(
-        {"exp": expiration, "sub": user_id},
+        {"exp": expiration, "sub": str(user_id)},
         os.getenv("JWT_KEY"),
         algorithm="HS256",
     )
@@ -46,7 +46,7 @@ def generate_token(user_id: str, timedelta_for_expiration=timedelta(days=1)):
     return encoded_jwt
 
 
-def decode_token(token: str = Depends(Oauth2Scheme)):
+def decode_token(token: str = Depends(Oauth2Scheme)) -> int | None:
     if not token: return None
     try:
         token = token[7:].encode('utf-8')
@@ -66,8 +66,7 @@ def decode_token(token: str = Depends(Oauth2Scheme)):
             ],
             options=jwt_options,
         )
-        print("token", decoded)
-        return decoded["sub"]
+        return int(decoded["sub"])
     except Exception as e:
         print(e.args)
         return None

@@ -11,10 +11,9 @@ router = APIRouter()
 @router.post("/talk")
 async def talk(
     event: dict,
-    user_uid: str | None = Depends(decode_token),
+    user_id: int | None = Depends(decode_token),
     db: AsyncSession = Depends(get_db),
 ):
-    print(event)
     response = {
         "version": event["version"],
         "session": event["session"],
@@ -33,7 +32,7 @@ async def talk(
 
         text = event["request"]["original_utterance"].lower().strip()
 
-        if not user_uid:
+        if not user_id:
             response["response"][
                 "text"
             ] = "Привет, для работы с навыком нужно \
@@ -44,7 +43,6 @@ async def talk(
             response["response"]["directives"] = {"start_account_linking": {}}
             return response
 
-        print("\t", text)
         if text in ["привет", "здарова", "здравствуй"]:
             response["response"][
                 "text"
@@ -67,7 +65,7 @@ async def talk(
             response["response"]["end_session"] = True
 
         else:
-            status = await add_items_to_shop_list_from_alice(user_uid, text, db)
+            status = await add_items_to_shop_list_from_alice(user_id, text, db)
 
             if status:
                 response["response"]["text"] = "Всё записала"
