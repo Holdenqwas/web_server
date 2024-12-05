@@ -118,9 +118,9 @@ async def login(
             f"client_id={payload.client_id}&state={payload.state}&code={code}&scope={payload.scope}"
         )
 
-        return RedirectResponse(url=redirect_url, status_code=302)
+        return RedirectResponse(url=redirect_url, headers=headers, status_code=302)
     else:
-        raise HTTPException(status_code=404, headers=headers, detail="Что-то пошло не так")
+        raise HTTPException(status_code=404, detail="Что-то пошло не так")
 
 
 # @router.get("/generate_verify_code")
