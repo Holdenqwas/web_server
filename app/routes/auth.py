@@ -1,10 +1,7 @@
 import os
-from fastapi.responses import RedirectResponse
-import requests
-import urllib.parse
 
 from datetime import timedelta
-from fastapi import APIRouter, Form, Request, Response, HTTPException, Body
+from fastapi import APIRouter, Form,  Response, HTTPException
 from fastapi.params import Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession

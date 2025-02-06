@@ -1,11 +1,11 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, HTTPException, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
-from app.utils.database import get_db
-from app.utils.auth import require_token_service
 from app.crud import training as crud
 from app.schemas import training as training_schema
+from app.utils.auth import require_token_service
+from app.utils.database import get_db
 
 router = APIRouter()
 

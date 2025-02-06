@@ -264,6 +264,27 @@ class VerCode(Base):
     def __repr__(self) -> str:
         return repr_table(self)
 
+
+class HomeActivity(Base):
+    __tablename__ = "home_activity"
+
+    uid: Mapped[uuid.UUID] = mapped_column(
+        types.Uuid, primary_key=True, server_default=text("gen_random_uuid()")
+    )
+    time = Column(
+        types.DateTime(timezone=True),
+        server_default=func.now(),
+    )
+    movement_status_1 = Column(Boolean, nullable=False)
+    movement_status_2 = Column(Boolean, nullable=False)
+    movement_status_3 = Column(Boolean, nullable=False)
+    humidity = Column(Float, nullable=False)
+    temperature = Column(Float, nullable=False)
+
+    def __repr__(self) -> str:
+        return repr_table(self)
+    
+
 def get_model(name: str):
     if name == "train1":
         return Train1

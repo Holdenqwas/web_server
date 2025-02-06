@@ -1,9 +1,9 @@
-from app.utils.auth import decode_token
-from app.utils.database import get_db
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.shop_list import add_items_to_shop_list_from_alice
+from app.utils.auth import decode_token
+from app.utils.database import get_db
 
 router = APIRouter()
 
