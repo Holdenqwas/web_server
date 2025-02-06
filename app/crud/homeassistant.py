@@ -20,7 +20,7 @@ async def write_light_activity(data: List[str | None], db: AsyncSession):
             logging.error(f"Не смог распарсить и создать HomeActivity. {e.args}")
 
     if not new_items:
-        return schemas.Message(success=False, message=f"{e.args}")
+        return schemas.Message(success=False, message="Нет элементов, которые можно записать")
     
     db.add_all(new_items)
 
