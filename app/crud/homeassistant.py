@@ -1,7 +1,8 @@
 import json
 import logging
-from typing import List
 
+from typing import List
+from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.schemas import homeassistant as schemas
@@ -14,6 +15,8 @@ async def write_light_activity(data: List[str | None], db: AsyncSession):
     for item in data:
         try:
             new_record_raw = json.loads(item)
+            if "time" in new_record_raw:
+                new_record_raw["time"] = datetime.fromisoformat(new_record_raw["time"])
             new_record = db_model.HomeActivity(**new_record_raw)
             new_items.append(new_record)
         except Exception as e:

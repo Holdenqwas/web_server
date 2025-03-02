@@ -278,8 +278,11 @@ class HomeActivity(Base):
     movement_status_1 = Column(Boolean, nullable=False)
     movement_status_2 = Column(Boolean, nullable=False)
     movement_status_3 = Column(Boolean, nullable=False)
+    movement_status_4 = Column(Boolean, nullable=False)
+    movement_status_5 = Column(Boolean, nullable=False)
     humidity = Column(Float, nullable=False)
     temperature = Column(Float, nullable=False)
+    entity_id = Column(Text, nullable=False)
 
     def __repr__(self) -> str:
         return repr_table(self)
